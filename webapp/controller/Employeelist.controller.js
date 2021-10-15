@@ -4,9 +4,16 @@ sap.ui.define([
 	"../model/formatter",
 	"sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
-    "sap/ui/core/Fragment"
-], function (BaseController, JSONModel, formatter, Filter, FilterOperator, Fragment) {
-	"use strict";
+    "sap/ui/core/Fragment",
+    "sap/m/MessageBox",
+    "sap/ui/export/Spreadsheet",
+    "sap/ui/export/library",
+    "../control/modules",
+    "sap/ui/model/Sorter"
+], function (BaseController, JSONModel, formatter, Filter, FilterOperator, Fragment, MessageBox, Spreadsheet, exportLibrary, modules, Sorter) {
+    "use strict";
+    const EdmType = exportLibrary.EdmType;
+    let _this;
 
 	return BaseController.extend("jelink.ui5app.controller.Employeelist", {
 
@@ -38,7 +45,26 @@ sap.ui.define([
             
             var oModel = new JSONModel("../model/employee.json");
             this.getView().setModel(oModel, "employee");
+            // this.getView().getModel("employee").refresh(true);
 
+            // 게시판 카운트 모델 생성
+            const oCountModel = new JSONModel({ count: 0 });
+            this.getView().setModel(oCountModel, "co");
+            // this.getView().getModel("co").refresh(true);
+            
+
+            // 테이블에 리스트 카운트 넣어주기
+            // let aSorters = [{}];
+            let oBinding = this.byId("table").getBinding("items");
+            
+            if (oBinding != undefined && oBinding.aIndices != undefined) {
+                this.getView().getModel("co").setProperty("/count", oBinding.aIndices.length);
+            }
+            // oBinding.sort(aSorters);
+       
+            // console.log(oBinding);
+            // console.log(oBinding.aIndices);
+            // console.log(oBinding.aIndices.length);
 		},
 
 		/* =========================================================== */
@@ -195,7 +221,142 @@ sap.ui.define([
 			if (aTableSearchState.length !== 0) {
 				oViewModel.setProperty("/tableNoDataText", this.getResourceBundle().getText("emplistNoDataWithSearchText"));
 			}
-		}
+        },
+        
+        onExport : function () {
+            // modules.log("onExport");
+            console.log(this.byId("table").getBinding("items"));
+
+            if(this.byId("table").getBinding("items") === undefined){
+                MessageBox.alert("리스트를 먼저 조회해주세요.");
+                return;
+            }
+
+            let aCols, oRowBinding, oSettings, oSheet, oTable;
+    
+            if (!this._oTable) {
+                this._oTable = this.byId('table');
+            }
+
+            oTable = this._oTable;
+            oRowBinding = oTable.getBinding('items');
+            aCols = this.createColumnConfig();
+
+            oSettings = {
+                workbook: {
+                    columns: aCols,
+                    hierarchyLevel: 'Level'
+                },
+                dataSource: oRowBinding,
+                fileName: 'emplist.xlsx',
+                worker: false 
+            };
+
+            oSheet = new Spreadsheet(oSettings);
+            oSheet.build().finally(function() {
+                oSheet.destroy();
+            });
+        },
+
+        createColumnConfig : function () {
+            const aCols = [];
+
+            aCols.push({
+            property: '부서',
+            type: EdmType.String
+            });
+
+            aCols.push({
+            property: '직급',
+            type: EdmType.String
+            });
+
+            aCols.push({
+            property: '성명',
+            type: EdmType.String
+            });
+
+            aCols.push({
+            property: '사번',
+            type: EdmType.String
+            });
+
+            aCols.push({
+            property: '입사일',
+            type: EdmType.String
+            });
+
+            aCols.push({
+            property: '담당업무',
+            type: EdmType.String
+            });
+
+            aCols.push({
+            property: '연락처',
+            type: EdmType.String
+            });
+
+            aCols.push({
+            property: '이메일',
+            type: EdmType.String
+            });
+
+            return aCols;
+        },
+
+        onSetFilter : function () {
+            this.onEmpOpenSettings();
+        },
+
+        // filter button dialog 띄워주기
+        onEmpOpenSettings : function () {
+            const sDialogTab = "filter";
+            
+            if (!this.byId("filter")) {
+                Fragment.load({
+                    id: this.getView().getId(),
+                    name: "jelink.ui5app.fragment.Filter",
+                    controller: this
+                }).then(function(oDialog){
+                    this.getView().addDependent(oDialog);
+                    oDialog.open(sDialogTab);
+                }.bind(this));
+            } else {
+                this.byId("filter").open(sDialogTab);
+            }
+        },
+
+        onConfirmOrderDialog : function (oEvent) {
+            let mParams = oEvent.getParameters();           // 해당 이벤트가 발생한 시점의 정보
+            console.log(mParams);                   
+            let sPath = mParams.sortItem.getKey();          // fragment.xml에서 지정한 sortItems의 key값
+            let bDescending = mParams.sortDescending;       // default value=> false
+
+            let aSorters = [];
+            aSorters.push(new Sorter(sPath, bDescending));  // sortItems의 key값들을 오름차순으로 정렬할 배열
+
+            let oBinding = this.byId("table").getBinding("items");      // table의 items 컬럼들값 (테이블의 행 정보)
+            this.getView().getModel("co").setProperty("/count", oBinding.aIndices.length);  // 행의 갯수를 담는 로직
+            oBinding.sort(aSorters);    // 행을 정렬할 때 aSorters 배열을 가져와서 담음
+
+            let aFilters = [];
+            mParams.filterItems.forEach(function(oItem) {
+                var aSplit = oItem.getKey().split("___"),
+                sPath = aSplit[0],
+                sOperator = aSplit[1],
+                sValue1 = aSplit[2],
+                sValue2 = aSplit[3],
+                oFilter = new Filter(sPath, sOperator, sValue1, sValue2);
+                aFilters.push(oFilter);
+            });
+
+            // apply filter settings
+            oBinding.filter(aFilters);
+
+            // update filter bar
+            this.byId("filterBar").setVisible(aFilters.length > 0);
+            this.byId("filterLabel").setText(mParams.filterString);
+            }
 
 	});
 });

@@ -1,8 +1,14 @@
 {
     "employee" : [
         {
-            "department" : "개발",
-            "position" : "사원",
+            "department" : {
+                "depName" : "개발",
+                "key" : "development"
+            },
+            "position" : {
+                "posName" : "사원",
+                "key" : "5"
+            },
             "name" : "정무아",
             "id" : "0001",
             "hiredDate" : "2021-10-01",
@@ -11,8 +17,14 @@
             "email" : "jmua333@naver.com"
         },
         {
-            "department" : "인사",
-            "position" : "주임",
+            "department" : {
+                "depName" : "인사",
+                "key" : "personnel"
+            },
+            "position" : {
+                "posName" : "주임",
+                "key" : "4"
+            },
             "name" : "김지수",
             "id" : "0002",
             "hiredDate" : "2017-04-10",
@@ -21,8 +33,14 @@
             "email" : "jisoo@jelink.co.kr"
         },
         {
-            "department" : "영업",
-            "position" : "과장",
+            "department" : {
+                "depName" : "영업",
+                "key" : "sales"
+            },
+            "position" : {
+                "posName" : "과장",
+                "key" : "3"
+            },
             "name" : "홍길동",
             "id" : "0003",
             "hiredDate" : "2015-09-20",
@@ -31,8 +49,14 @@
             "email" : "gildong@daum.net"
         },
         {
-            "department" : "개발",
-            "position" : "이사",
+            "department" : {
+                "depName" : "개발",
+                "key" : "development"
+            },
+            "position" : {
+                "posName" : "이사",
+                "key" : "2"
+            },
             "name" : "김영희",
             "id" : "0004",
             "hiredDate" : "2010-05-10",
@@ -41,8 +65,14 @@
             "email" : "yhkim@gmail.com"
         },
         {
-            "department" : "인사",
-            "position" : "상무",
+            "department" : {
+                "depName" : "인사",
+                "key" : "personnel"
+            },
+            "position" : {
+                "posName" : "상무",
+                "key" : "1"
+            },
             "name" : "이지은",
             "id" : "0005",
             "hiredDate" : "2006-06-01",

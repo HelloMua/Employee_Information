@@ -20,10 +20,12 @@
 				width="auto"
 				items="{
 					path: 'employee>/employee',
-					sorter: {
-						path: 'ID',
-						descending: false
-					}
+					sorter: [
+                        {path: 'employee>department/depName'},
+                        {path: 'employee>position'},
+                        {path: 'employee>name'}
+                    ],
+                    descending: false
 				}"
 				noDataText="{emplistView>/tableNoDataText}"
 				growing="true"
@@ -32,7 +34,7 @@
 
 				<headerToolbar>
 					<Toolbar>
-						<Title id="tableHeader" text="사원목록 {= '(' + '0' + ')'}"/>
+						<Title id="tableHeader" text="사원목록 ({co>/count})"/>
 						<ToolbarSpacer />
                         <Button icon="sap-icon://add-employee" text="사원정보 추가" type="Emphasized" press="onEmpAddDialogOpen" />
                         <ToolbarSeparator />
@@ -51,6 +53,12 @@
                         <Button icon="sap-icon://excel-attachment" press="onExport" />
 					</Toolbar>
 				</headerToolbar>
+
+                <infoToolbar>
+                    <OverflowToolbar id="filterBar" visible="false">
+                        <Text id="filterLabel" />
+                    </OverflowToolbar>
+                </infoToolbar>
 
 				<columns>
                     <Column id="DescriptionColumn">
@@ -85,9 +93,9 @@
 						press=".onPress">
 						<cells>
 							<ObjectIdentifier
-								    text="{employee>department}" textAlign="Left"/>
+								text="{employee>department/depName}" textAlign="Left"/>
                             <Text
-                                text="{employee>position}" textAlign="Left"/>
+                                text="{employee>position/posName}" textAlign="Left"/>
                             <Text
                                 text="{employee>name}" textAlign="Left"/>
                             <Text

@@ -1,0 +1,49 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<ViewSettingsDialog
+		id="filter"
+		confirm=".onConfirmOrderDialog"
+		title="정렬">
+        <filterItems>
+            <ViewSettingsFilterItem text="부서" key="department" >
+                <items>
+                    <ViewSettingsItem text="개발" key="development" />
+                    <ViewSettingsItem text="인사" key="personnel" />
+                    <ViewSettingsItem text="영업" key="sales" />
+                </items>
+            </ViewSettingsFilterItem>
+            <ViewSettingsFilterItem text="직급" key="position" >
+                <items>
+                    <ViewSettingsItem text="상무" key="1" />
+                    <ViewSettingsItem text="이사" key="2" />
+                    <ViewSettingsItem text="과장" key="3" />
+                    <ViewSettingsItem text="주임" key="4" />
+                    <ViewSettingsItem text="사원" key="5" />
+                </items>
+            </ViewSettingsFilterItem>
+            <ViewSettingsFilterItem text="입사일" key="hiredDate" >
+                <items>
+                    <ViewSettingsItem text="" key="" />
+                    <ViewSettingsItem text="" key="" />
+                    <ViewSettingsItem text="" key="" />
+                </items>
+            </ViewSettingsFilterItem>
+        </filterItems>
+
+		<sortItems>
+            <ViewSettingsItem text="부서" key="department" selected="true"/>
+            <ViewSettingsItem text="직급" key="position"/>
+            <ViewSettingsItem text="성명" key="name"/>
+            <ViewSettingsItem text="사번" key="id"/>
+            <ViewSettingsItem text="연락처" key="phoneNumber"/>
+            <ViewSettingsItem text="이메일" key="email"/>
+		</sortItems>
+
+        <groupItems>
+            <ViewSettingsItem text="부서" key="department" selected="true" />
+            <ViewSettingsItem text="직급" key="position" />
+            <ViewSettingsItem text="입사일" key="hiredDate" />
+        </groupItems>
+	</ViewSettingsDialog>
+</core:FragmentDefinition>
