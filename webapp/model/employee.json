@@ -1,82 +1,52 @@
 [
     {
-        "department" : {
-            "depName" : "개발"
-        },
-        "position" : {
-            "posName" : "사원",
-            "key" : "5"
-        },
+        "department" : "개발",
+        "position" : "사원",
         "name" : "정무아",
         "id" : "0001",
         "hiredDate" : "2021-10-01",
         "task" : "Gilro 개발",
         "phoneNumber" : "010-1234-5678",
-        "email" : "jmua333@naver.com",
-        "development" : "개발"
+        "email" : "jmua333@naver.com"
     },
     {
-        "department" : {
-            "depName" : "인사"
-        },
-        "position" : {
-            "posName" : "주임",
-            "key" : "4"
-        },
+        "department" : "인사",
+        "position" : "주임",
         "name" : "김지수",
         "id" : "0002",
         "hiredDate" : "2017-04-10",
         "task" : "Signavio 개발",
         "phoneNumber" : "010-1235-5645",
-        "email" : "jisoo@jelink.co.kr",
-        "personnel" : "인사"
+        "email" : "jisoo@jelink.co.kr"
     },
     {
-        "department" : {
-            "depName" : "영업"
-        },
-        "position" : {
-            "posName" : "과장",
-            "key" : "3"
-        },
+        "department" : "영업",
+        "position" : "과장",
         "name" : "홍길동",
         "id" : "0003",
         "hiredDate" : "2015-09-20",
         "task" : "Gilro 개발",
         "phoneNumber" : "010-5465-3453",
-        "email" : "gildong@daum.net",
-        "sales" : "영업"
+        "email" : "gildong@daum.net"
     },
     {
-        "department" : {
-            "depName" : "개발"
-        },
-        "position" : {
-            "posName" : "이사",
-            "key" : "2"
-        },
+        "department" : "개발",
+        "position" : "이사",
         "name" : "김영희",
         "id" : "0004",
         "hiredDate" : "2010-05-10",
         "task" : "Gilro 개발",
         "phoneNumber" : "010-8567-3643",
-        "email" : "yhkim@gmail.com",
-        "development" : "개발"
+        "email" : "yhkim@gmail.com"
     },
     {
-        "department" : {
-            "depName" : "인사"
-        },
-        "position" : {
-            "posName" : "상무",
-            "key" : "1"
-        },
+        "department" : "인사",
+        "position" : "상무",
         "name" : "이지은",
         "id" : "0005",
         "hiredDate" : "2006-06-01",
         "task" : "Signavio 개발",
         "phoneNumber" : "010-9256-4573",
-        "email" : "leejien@naver.com",
-        "personnel" : "인사"
+        "email" : "leejien@naver.com"
     }
 ]

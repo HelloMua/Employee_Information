@@ -28,7 +28,23 @@ sap.ui.define([
 		 * @public
 		 */
 		onInit : function () {
-			var oViewModel;
+            var oViewModel;
+            
+            var oDepModel = new JSONModel([
+                {type: "개발"},
+                {type: "영업"},
+                {type: "인사"}
+            ]);
+            this.getView().setModel(oDepModel, "depCategory");
+
+            var oPosModel = new JSONModel([
+                {type: "사원"},
+                {type: "주임"},
+                {type: "과장"},
+                {type: "이사"},
+                {type: "상무"}
+            ]);
+            this.getView().setModel(oPosModel, "posCategory");
 
 			// keeps the search state
 			this._aTableSearchState = [];
@@ -174,10 +190,6 @@ sap.ui.define([
             //         if (oEvent.getSource().getSelectedKey("name")) {
             //             aTableSearchState = [new Filter("name", FilterOperator.Contains, sQuery)];
             //         }
-
-            //         // aTableSearchState = [new Filter("id", FilterOperator.Contains, sQuery)];
-            //         // aTableSearchState = [new Filter("phoneNumber", FilterOperator.Contains, sQuery)];
-            //         // aTableSearchState = [new Filter("email", FilterOperator.Contains, sQuery)];
 			// 	}
 			// 	this._applySearch(aTableSearchState);
             // }
@@ -237,17 +249,34 @@ sap.ui.define([
             var aEmailFilter = [new Filter({path: "email", operator: FilterOperator.Contains, value1: sSearchValue, caseSensitive: false})];
 
             // 검색조건 선택값에 따라 조건처리
-            if (this.byId("table").getBinding("items").getSelectedKey("name")) {
+            if (this.byId("selectedItems").getSelectedKey() === "name") {
                 aFilterSet.push(new Filter({filters: aNameFilter}));
+            } else if (this.byId("selectedItems").getSelectedKey() === "id") {
+                aFilterSet.push(new Filter({filters: aIdFilter}));
+            } else if (this.byId("selectedItems").getSelectedKey() === "phoneNumber") {
+                aFilterSet.push(new Filter({filters: aPhoneNumFilter}));
+            } else if (this.byId("selectedItems").getSelectedKey() === "email") {
+                aFilterSet.push(new Filter({filters: aEmailFilter}));
+            } else if (this.byId("selectedItems").getSelectedKey() === "all") {
+                console.log("타나?")
+                aFilterSet.push(new Filter({
+                    filters: [
+                        new Filter({path: "department/depName", operator: FilterOperator.Contains, value1: sSearchValue, caseSensitive: false}),
+                        new Filter({path: "position/posName", operator: FilterOperator.Contains, value1: sSearchValue, caseSensitive: false}),
+                        new Filter({path: "name", operator: FilterOperator.Contains, value1: sSearchValue, caseSensitive: false}),
+                        new Filter({path: "id", operator: FilterOperator.Contains, value1: sSearchValue, caseSensitive: false}),
+                        new Filter({path: "hiredDate", operator: FilterOperator.Contains, value1: sSearchValue, caseSensitive: false}),
+                        new Filter({path: "task", operator: FilterOperator.Contains, value1: sSearchValue, caseSensitive: false}),
+                        new Filter({path: "phoneNumber", operator: FilterOperator.Contains, value1: sSearchValue, caseSensitive: false}),
+                        new Filter({path: "email", operator: FilterOperator.Contains, value1: sSearchValue, caseSensitive: false})
+                    ],
+                    and: false
+                }));
             }
+
+            // aFilters.push(new Filter({filters: aFilterSet}));
+            oTable.getBinding("items").filter(aFilterSet);
             
-            // aFilterSet.push(new Filter({filters: aIdFilter}));
-            // aFilterSet.push(new Filter({filters: aPhoneNumFilter}));
-            // aFilterSet.push(new Filter({filters: aEmailFilter}));
-
-            aFilters.push(new Filter({filters: aFilterSet}));
-
-			oTable.getBinding("items").filter(aFilters);
 			// changes the noDataText of the list in case there are no filter results
 			if (oTable.getBinding("items").length !== 0) {
                 // oViewModel.setProperty("/tableNoDataText", this.getResourceBundle().getText("emplistNoDataWithSearchText"));
@@ -293,12 +322,12 @@ sap.ui.define([
             const aCols = [];
 
             aCols.push({
-            property: 'department/depName',
+            property: 'department',
             type: EdmType.String
             });
 
             aCols.push({
-            property: 'position/posName',
+            property: 'position',
             type: EdmType.String
             });
 
@@ -363,11 +392,11 @@ sap.ui.define([
             console.log(mParams);        
 
             // 정렬
-            let sPathSort = mParams.sortItem.getKey();          // fragment.xml에서 지정한 sortItems의 key값
-            let bDescendingSort = mParams.sortDescending;       // default value=> false
+            let sPath = mParams.sortItem.getKey();          // fragment.xml에서 지정한 sortItems의 key값
+            let bDescending = mParams.sortDescending;       // default value=> false
 
             let aSorters = [];
-            aSorters.push(new Sorter(sPathSort, bDescendingSort));  // sortItems의 key값들을 오름차순으로 정렬할 배열
+            aSorters.push(new Sorter(sPath, bDescending));  // sortItems의 key값들을 오름차순으로 정렬할 배열
             
             this.getView().getModel("co").setProperty("/count", oBinding.aIndices.length);  // 행의 갯수를 담는 로직
             oBinding.sort(aSorters);    // 행을 정렬할 때 aSorters 배열을 가져와서 담음
@@ -376,7 +405,7 @@ sap.ui.define([
             let aFilters = [];
             mParams.filterItems.forEach(function (oItem) {
                 // console.log(oItem);
-                var aSplit = oItem.getKey().split("___"),       // "__"의 앞과 뒤를 기준으로 string을 array형태로 만들어줌
+                var aSplit = oItem.getKey().split("___"),       // "___"의 앞과 뒤를 기준으로 string을 array형태로 만들어줌
                 sPath = aSplit[0],
                 sOperator = aSplit[1],
                 sValue1 = aSplit[2],
@@ -395,9 +424,8 @@ sap.ui.define([
             console.log(aFilters);
 
             // 그룹화
-            // let sPathGroup, bDescendingGroup;
-            // let vGroup,
-            //     aGroups = [];
+            let vGroup,
+                aGroups = [];
 
             // if (mParams.groupItem) {
             //     sPathGroup = mParams.groupItem.getKey();        // fragment.xml에서 지정한 groupItems의 key값
@@ -413,6 +441,20 @@ sap.ui.define([
             //     oBinding.sort();
             //     this.groupReset = false;
             // }
+
+            if (mParams.groupItem) {
+                sPath = mParams.groupItem.getKey();
+                bDescending = mParams.groupDescending;
+                console.log(sPath);
+                vGroup = this.mGroupFunctions[sPath];
+                aGroups.push(new Sorter(sPath, bDescending, vGroup));
+
+                // apply the selected group settings
+                oBinding.sort(aGroups);
+            } else if (this.groupReset) {
+                oBinding.sort();
+                this.groupReset = false;
+            }
         }
 	});
 });

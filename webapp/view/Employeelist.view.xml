@@ -39,7 +39,7 @@
                         <Button icon="sap-icon://add-employee" text="사원정보 추가" type="Emphasized" press="onEmpAddDialogOpen" />
                         <ToolbarSeparator />
                         <!-- https://sapui5.hana.ondemand.com/sdk/test-resources/sap/m/demokit/iconExplorer/webapp/index.html#/overview/SAP-icons/?tab=grid&icon=attachment -->
-						<Select>
+						<Select id="selectedItems">
                             <core:Item key="all" text="전체" />
                             <core:Item key="name" text="성명" />
                             <core:Item key="id" text="사번" />
@@ -59,7 +59,7 @@
 				</headerToolbar>
 
                 <infoToolbar>
-                    <OverflowToolbar id="filterBar" visible="true">
+                    <OverflowToolbar id="filterBar" visible="false">
                         <Text id="filterLabel" />
                     </OverflowToolbar>
                 </infoToolbar>
@@ -97,9 +97,9 @@
 						press=".onPress">
 						<cells>
 							<ObjectIdentifier
-								text="{employee>department/depName}" textAlign="Left"/>
+								text="{employee>department}" textAlign="Left"/>
                             <Text
-                                text="{employee>position/posName}" textAlign="Left"/>
+                                text="{employee>position}" textAlign="Left"/>
                             <Text
                                 text="{employee>name}" textAlign="Left"/>
                             <Text
