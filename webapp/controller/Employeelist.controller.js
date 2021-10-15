@@ -29,22 +29,9 @@ sap.ui.define([
 		 */
 		onInit : function () {
             var oViewModel;
-            
-            var oDepModel = new JSONModel([
-                {type: "개발"},
-                {type: "영업"},
-                {type: "인사"}
-            ]);
-            this.getView().setModel(oDepModel, "depCategory");
 
-            var oPosModel = new JSONModel([
-                {type: "사원"},
-                {type: "주임"},
-                {type: "과장"},
-                {type: "이사"},
-                {type: "상무"}
-            ]);
-            this.getView().setModel(oPosModel, "posCategory");
+            var oCategory = new JSONModel("../model/category.json");
+            this.getView().setModel(oCategory);
 
 			// keeps the search state
 			this._aTableSearchState = [];
@@ -173,7 +160,6 @@ sap.ui.define([
 			history.go(-1);
 		},
 
-
 		onSearch : function (oEvent) {
 			// if (oEvent.getParameters().refreshButtonPressed) {
 			// 	// Search field's 'refresh' button has been pressed.
@@ -261,8 +247,8 @@ sap.ui.define([
                 console.log("타나?")
                 aFilterSet.push(new Filter({
                     filters: [
-                        new Filter({path: "department/depName", operator: FilterOperator.Contains, value1: sSearchValue, caseSensitive: false}),
-                        new Filter({path: "position/posName", operator: FilterOperator.Contains, value1: sSearchValue, caseSensitive: false}),
+                        new Filter({path: "department", operator: FilterOperator.Contains, value1: sSearchValue, caseSensitive: false}),
+                        new Filter({path: "position", operator: FilterOperator.Contains, value1: sSearchValue, caseSensitive: false}),
                         new Filter({path: "name", operator: FilterOperator.Contains, value1: sSearchValue, caseSensitive: false}),
                         new Filter({path: "id", operator: FilterOperator.Contains, value1: sSearchValue, caseSensitive: false}),
                         new Filter({path: "hiredDate", operator: FilterOperator.Contains, value1: sSearchValue, caseSensitive: false}),
@@ -427,24 +413,10 @@ sap.ui.define([
             let vGroup,
                 aGroups = [];
 
-            // if (mParams.groupItem) {
-            //     sPathGroup = mParams.groupItem.getKey();        // fragment.xml에서 지정한 groupItems의 key값
-            //     bDescendingGroup = mParams.groupDescending;      // default value=> false
-
-            //     // console.log(this);
-            //     // vGroup = this.mGorupFunctions[sPathGroup];
-            //     aGroups.push(new Sorter(sPathGroup, bDescendingGroup, vGroup));
-
-            //     // apply the selected group settings
-            //     oBinding.sort(aGroups);
-            // } else if (this.groupReset) {
-            //     oBinding.sort();
-            //     this.groupReset = false;
-            // }
-
             if (mParams.groupItem) {
                 sPath = mParams.groupItem.getKey();
                 bDescending = mParams.groupDescending;
+
                 console.log(sPath);
                 vGroup = this.mGroupFunctions[sPath];
                 aGroups.push(new Sorter(sPath, bDescending, vGroup));

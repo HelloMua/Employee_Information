@@ -5,7 +5,7 @@
         "name" : "정무아",
         "id" : "0001",
         "hiredDate" : "2021-10-01",
-        "task" : "Gilro 개발",
+        "task" : "Gilro",
         "phoneNumber" : "010-1234-5678",
         "email" : "jmua333@naver.com"
     },
@@ -15,7 +15,7 @@
         "name" : "김지수",
         "id" : "0002",
         "hiredDate" : "2017-04-10",
-        "task" : "Signavio 개발",
+        "task" : "Signavio",
         "phoneNumber" : "010-1235-5645",
         "email" : "jisoo@jelink.co.kr"
     },
@@ -25,7 +25,7 @@
         "name" : "홍길동",
         "id" : "0003",
         "hiredDate" : "2015-09-20",
-        "task" : "Gilro 개발",
+        "task" : "Gilro",
         "phoneNumber" : "010-5465-3453",
         "email" : "gildong@daum.net"
     },
@@ -35,7 +35,7 @@
         "name" : "김영희",
         "id" : "0004",
         "hiredDate" : "2010-05-10",
-        "task" : "Gilro 개발",
+        "task" : "Gilro",
         "phoneNumber" : "010-8567-3643",
         "email" : "yhkim@gmail.com"
     },
@@ -45,7 +45,7 @@
         "name" : "이지은",
         "id" : "0005",
         "hiredDate" : "2006-06-01",
-        "task" : "Signavio 개발",
+        "task" : "Signavio",
         "phoneNumber" : "010-9256-4573",
         "email" : "leejien@naver.com"
     }
