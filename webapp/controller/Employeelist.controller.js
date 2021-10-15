@@ -328,20 +328,24 @@ sap.ui.define([
 
         onConfirmOrderDialog : function (oEvent) {
             let mParams = oEvent.getParameters();           // 해당 이벤트가 발생한 시점의 정보
-            console.log(mParams);                   
-            let sPath = mParams.sortItem.getKey();          // fragment.xml에서 지정한 sortItems의 key값
-            let bDescending = mParams.sortDescending;       // default value=> false
+            let oBinding = this.byId("table").getBinding("items");      // table의 items 컬럼들값 (테이블의 행 정보)
+            console.log(mParams);        
+
+            // 정렬
+            let sPathSort = mParams.sortItem.getKey();          // fragment.xml에서 지정한 sortItems의 key값
+            let bDescendingSort = mParams.sortDescending;       // default value=> false
 
             let aSorters = [];
-            aSorters.push(new Sorter(sPath, bDescending));  // sortItems의 key값들을 오름차순으로 정렬할 배열
-
-            let oBinding = this.byId("table").getBinding("items");      // table의 items 컬럼들값 (테이블의 행 정보)
+            aSorters.push(new Sorter(sPathSort, bDescendingSort));  // sortItems의 key값들을 오름차순으로 정렬할 배열
+            
             this.getView().getModel("co").setProperty("/count", oBinding.aIndices.length);  // 행의 갯수를 담는 로직
             oBinding.sort(aSorters);    // 행을 정렬할 때 aSorters 배열을 가져와서 담음
 
+            // 필터
             let aFilters = [];
-            mParams.filterItems.forEach(function(oItem) {
-                var aSplit = oItem.getKey().split("___"),
+            mParams.filterItems.forEach(function (oItem) {
+                // console.log(oItem);
+                var aSplit = oItem.getKey().split("___"),       // "__"의 앞과 뒤를 기준으로 string을 array형태로 만들어줌
                 sPath = aSplit[0],
                 sOperator = aSplit[1],
                 sValue1 = aSplit[2],
@@ -356,7 +360,28 @@ sap.ui.define([
             // update filter bar
             this.byId("filterBar").setVisible(aFilters.length > 0);
             this.byId("filterLabel").setText(mParams.filterString);
-            }
 
+            console.log(aFilters);
+
+            // 그룹화
+            // let sPathGroup, bDescendingGroup;
+            // let vGroup,
+            //     aGroups = [];
+
+            // if (mParams.groupItem) {
+            //     sPathGroup = mParams.groupItem.getKey();        // fragment.xml에서 지정한 groupItems의 key값
+            //     bDescendingGroup = mParams.groupDescending;      // default value=> false
+
+            //     // console.log(this);
+            //     // vGroup = this.mGorupFunctions[sPathGroup];
+            //     aGroups.push(new Sorter(sPathGroup, bDescendingGroup, vGroup));
+
+            //     // apply the selected group settings
+            //     oBinding.sort(aGroups);
+            // } else if (this.groupReset) {
+            //     oBinding.sort();
+            //     this.groupReset = false;
+            // }
+        }
 	});
 });

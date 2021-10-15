@@ -55,7 +55,7 @@
 				</headerToolbar>
 
                 <infoToolbar>
-                    <OverflowToolbar id="filterBar" visible="false">
+                    <OverflowToolbar id="filterBar" visible="true">
                         <Text id="filterLabel" />
                     </OverflowToolbar>
                 </infoToolbar>
