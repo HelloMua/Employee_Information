@@ -19,7 +19,7 @@
 				id="table"
 				width="auto"
 				items="{
-					path: '/Mitigations',
+					path: 'employee>/employee',
 					sorter: {
 						path: 'ID',
 						descending: false
@@ -85,21 +85,21 @@
 						press=".onPress">
 						<cells>
 							<ObjectIdentifier
-								    text="{description}" />
+								    text="{employee>department}" textAlign="Left"/>
                             <Text
-                                text="{owner}" />
+                                text="{employee>position}" textAlign="Left"/>
                             <Text
-                                text="{timeline}" />
+                                text="{employee>name}" textAlign="Left"/>
                             <Text
-                                text="{timeline}" />
+                                text="{employee>id}" textAlign="Center" />
                             <Text
-                                text="{timeline}" />
+                                text="{employee>hiredDate}" textAlign="Right"/>
                             <Text
-                                text="{timeline}" />
+                                text="{employee>task}" textAlign="Left"/>
                             <Text
-                                text="{timeline}" />
+                                text="{employee>phoneNumber}" textAlign="Right"/>
                             <Text
-                                text="{timeline}" />
+                                text="{employee>email}" textAlign="Left"/>
 						</cells>
 					</ColumnListItem>
 				</items>

@@ -34,7 +34,10 @@ sap.ui.define([
 				shareSendEmailMessage: this.getResourceBundle().getText("shareSendEmailemplistMessage", [location.href]),
 				tableNoDataText : this.getResourceBundle().getText("tableNoDataText")
 			});
-			this.setModel(oViewModel, "emplistView");
+            this.setModel(oViewModel, "emplistView");
+            
+            var oModel = new JSONModel("../model/employee.json");
+            this.getView().setModel(oModel, "employee");
 
 		},
 
