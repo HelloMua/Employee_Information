@@ -19,7 +19,7 @@
 				id="table"
 				width="auto"
 				items="{
-					path: 'employee>/employee',
+					path: 'employee>/',
 					sorter: [
                         {path: 'employee>department/depName'},
                         {path: 'employee>position'},
@@ -41,6 +41,10 @@
                         <!-- https://sapui5.hana.ondemand.com/sdk/test-resources/sap/m/demokit/iconExplorer/webapp/index.html#/overview/SAP-icons/?tab=grid&icon=attachment -->
 						<Select>
                             <core:Item key="all" text="전체" />
+                            <core:Item key="name" text="성명" />
+                            <core:Item key="id" text="사번" />
+                            <core:Item key="phoneNumber" text="연락처" />
+                            <core:Item key="email" text="이메일" />
                         </Select>
                         <SearchField
 							id="searchField"

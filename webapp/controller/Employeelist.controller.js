@@ -159,21 +159,31 @@ sap.ui.define([
 
 
 		onSearch : function (oEvent) {
-			if (oEvent.getParameters().refreshButtonPressed) {
-				// Search field's 'refresh' button has been pressed.
-				// This is visible if you select any master list item.
-				// In this case no new search is triggered, we only
-				// refresh the list binding.
-				this.onRefresh();
-			} else {
-				var aTableSearchState = [];
-				var sQuery = oEvent.getParameter("query");
+			// if (oEvent.getParameters().refreshButtonPressed) {
+			// 	// Search field's 'refresh' button has been pressed.
+			// 	// This is visible if you select any master list item.
+			// 	// In this case no new search is triggered, we only
+			// 	// refresh the list binding.
+            //     // this.onRefresh();
+                
+			// } else {
+			// 	var aTableSearchState = [];
+			// 	var sQuery = oEvent.getParameter("query");
 
-				if (sQuery && sQuery.length > 0) {
-					aTableSearchState = [new Filter("ID", FilterOperator.Contains, sQuery)];
-				}
-				this._applySearch(aTableSearchState);
-			}
+			// 	if (sQuery && sQuery.length > 0) {
+            //         if (oEvent.getSource().getSelectedKey("name")) {
+            //             aTableSearchState = [new Filter("name", FilterOperator.Contains, sQuery)];
+            //         }
+
+            //         // aTableSearchState = [new Filter("id", FilterOperator.Contains, sQuery)];
+            //         // aTableSearchState = [new Filter("phoneNumber", FilterOperator.Contains, sQuery)];
+            //         // aTableSearchState = [new Filter("email", FilterOperator.Contains, sQuery)];
+			// 	}
+			// 	this._applySearch(aTableSearchState);
+            // }
+            
+            var inputValue = this.getView().byId("searchField").getValue();
+            this._applySearch(inputValue);
 
 		},
 
@@ -213,18 +223,39 @@ sap.ui.define([
 		 * @param {sap.ui.model.Filter[]} aTableSearchState An array of filters for the search
 		 * @private
         */
-		_applySearch: function(aTableSearchState) {
+		_applySearch: function (sSearchValue) {
 			var oTable = this.byId("table"),
-				oViewModel = this.getModel("emplistView");
-			oTable.getBinding("items").filter(aTableSearchState, "Application");
+                oViewModel = this.getModel("employee");
+                
+            var aFilters = [];
+            var aFilterSet = [];        // 검색바 입력에 맞는 조건들의 배열
+
+            // 검색바 입력에 따라 조건처리
+            var aNameFilter = [new Filter({path: "name", operator: FilterOperator.Contains, value1: sSearchValue, caseSensitive: false})];
+            var aIdFilter = [new Filter({path: "id", operator: FilterOperator.Contains, value1: sSearchValue, caseSensitive: false})];
+            var aPhoneNumFilter = [new Filter({path: "phoneNumber", operator: FilterOperator.Contains, value1: sSearchValue, caseSensitive: false})];
+            var aEmailFilter = [new Filter({path: "email", operator: FilterOperator.Contains, value1: sSearchValue, caseSensitive: false})];
+
+            // 검색조건 선택값에 따라 조건처리
+            if (this.byId("table").getBinding("items").getSelectedKey("name")) {
+                aFilterSet.push(new Filter({filters: aNameFilter}));
+            }
+            
+            // aFilterSet.push(new Filter({filters: aIdFilter}));
+            // aFilterSet.push(new Filter({filters: aPhoneNumFilter}));
+            // aFilterSet.push(new Filter({filters: aEmailFilter}));
+
+            aFilters.push(new Filter({filters: aFilterSet}));
+
+			oTable.getBinding("items").filter(aFilters);
 			// changes the noDataText of the list in case there are no filter results
-			if (aTableSearchState.length !== 0) {
-				oViewModel.setProperty("/tableNoDataText", this.getResourceBundle().getText("emplistNoDataWithSearchText"));
+			if (oTable.getBinding("items").length !== 0) {
+                // oViewModel.setProperty("/tableNoDataText", this.getResourceBundle().getText("emplistNoDataWithSearchText"));
+                oViewModel.setProperty("/tableNoDataText", "데이터가  없습니다.");
 			}
         },
         
         onExport : function () {
-            // modules.log("onExport");
             console.log(this.byId("table").getBinding("items"));
 
             if(this.byId("table").getBinding("items") === undefined){
@@ -239,13 +270,13 @@ sap.ui.define([
             }
 
             oTable = this._oTable;
-            oRowBinding = oTable.getBinding('items');
+            oRowBinding = oTable.getBinding("items");
             aCols = this.createColumnConfig();
 
             oSettings = {
                 workbook: {
                     columns: aCols,
-                    hierarchyLevel: 'Level'
+                    hierarchyLevel: "Level"
                 },
                 dataSource: oRowBinding,
                 fileName: 'emplist.xlsx',
@@ -262,42 +293,42 @@ sap.ui.define([
             const aCols = [];
 
             aCols.push({
-            property: '부서',
+            property: 'department/depName',
             type: EdmType.String
             });
 
             aCols.push({
-            property: '직급',
+            property: 'position/posName',
             type: EdmType.String
             });
 
             aCols.push({
-            property: '성명',
+            property: 'name',
             type: EdmType.String
             });
 
             aCols.push({
-            property: '사번',
+            property: 'id',
             type: EdmType.String
             });
 
             aCols.push({
-            property: '입사일',
+            property: 'hiredDate',
             type: EdmType.String
             });
 
             aCols.push({
-            property: '담당업무',
+            property: 'task',
             type: EdmType.String
             });
 
             aCols.push({
-            property: '연락처',
+            property: 'phoneNumber',
             type: EdmType.String
             });
 
             aCols.push({
-            property: '이메일',
+            property: 'email',
             type: EdmType.String
             });
 
