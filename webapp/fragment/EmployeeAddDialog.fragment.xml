@@ -1,0 +1,48 @@
+<core:FragmentDefinition
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:layout="sap.ui.layout" 
+    xmlns:uxap="sap.uxap"
+    xmlns:core="sap.ui.core">
+    <Dialog 
+        id="empDialog"
+        class="sapUiSizeCompact"
+        title="사원정보 등록"
+        contentWidth="400px">
+        <content>  
+            <VBox class="sapUiSmallMargin">
+                <form:SimpleForm
+                    layout="ResponsiveGridLayout">
+                    <form:content>
+                        <VBox>
+                            <Label text="성명:" required="true"/> 
+                            <Select 
+                                width="100%"
+                                required="true">
+                            </Select>
+                            <layoutData>
+                                <layout:GridData span="XL12 L12 M12 S12" />
+                            </layoutData> 
+                        </VBox>
+                        <VBox class="sapUiTinyMarginTopBottom">
+                            <Label text="부서:" required="true"/> 
+                            <Select
+                                required="true">
+                            </Select>
+                            <layoutData>
+                                <layout:GridData span="XL12 L12 M12 S12" />
+                            </layoutData> 
+                        </VBox>
+                    </form:content>
+                </form:SimpleForm>
+            </VBox>       
+        </content>
+        <beginButton>
+            <Button text="추가"  type="Emphasized" press=".onCreateEmployee"/>
+        </beginButton>
+        <endButton>
+            <Button text="취소" type="Transparent" press=".onCancelEmployee"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

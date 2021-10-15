@@ -1,0 +1,112 @@
+<mvc:View
+	controllerName="jelink.ui5app.controller.Employeelist"
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:semantic="sap.f.semantic">
+
+	<semantic:SemanticPage
+		id="page"
+		headerPinnable="false"
+		toggleHeaderOnTitleClick="false">
+
+		<semantic:titleHeading>
+			<Title text="{i18n>emplistTitle}" />
+		</semantic:titleHeading>
+
+		<semantic:content>
+			<Table
+				id="table"
+				width="auto"
+				items="{
+					path: '/Mitigations',
+					sorter: {
+						path: 'ID',
+						descending: false
+					}
+				}"
+				noDataText="{emplistView>/tableNoDataText}"
+				growing="true"
+				growingScrollToLoad="true"
+				updateFinished=".onUpdateFinished">
+
+				<headerToolbar>
+					<Toolbar>
+						<Title id="tableHeader" text="사원목록 {= '(' + '0' + ')'}"/>
+						<ToolbarSpacer />
+                        <Button icon="sap-icon://add-employee" text="사원정보 추가" type="Emphasized" press="onEmpAddDialogOpen" />
+                        <ToolbarSeparator />
+                        <!-- https://sapui5.hana.ondemand.com/sdk/test-resources/sap/m/demokit/iconExplorer/webapp/index.html#/overview/SAP-icons/?tab=grid&icon=attachment -->
+						<Select>
+                            <core:Item key="all" text="전체" />
+                        </Select>
+                        <SearchField
+							id="searchField"
+							tooltip="{i18n>emplistSearchTooltip}"
+							search=".onSearch"
+							width="auto">
+						</SearchField>
+                        <ToolbarSeparator />
+                        <Button icon="sap-icon://filter" press="onSetFilter" />
+                        <Button icon="sap-icon://excel-attachment" press="onExport" />
+					</Toolbar>
+				</headerToolbar>
+
+				<columns>
+                    <Column id="DescriptionColumn">
+                        <Text text="부서" id="DescriptionColumnTitle"/>
+                    </Column>
+                    <Column id="OwnerColumn">
+                        <Text text="직급" id="OwnerColumnTitle"/>
+                    </Column>
+                    <Column id="TimelineColumn">
+                        <Text text="성명" id="TimelineColumnTitle"/>
+                    </Column>
+                    <Column>
+                        <Text text="사번"/>
+                    </Column>
+                    <Column>
+                        <Text text="입사일"/>
+                    </Column>
+                    <Column>
+                        <Text text="담당업무"/>
+                    </Column>
+                    <Column>
+                        <Text text="연락처"/>
+                    </Column>
+                    <Column>
+                        <Text text="이메일"/>
+                    </Column>
+				</columns>
+
+				<items>
+					<ColumnListItem
+						type="Navigation"
+						press=".onPress">
+						<cells>
+							<ObjectIdentifier
+								    text="{description}" />
+                            <Text
+                                text="{owner}" />
+                            <Text
+                                text="{timeline}" />
+                            <Text
+                                text="{timeline}" />
+                            <Text
+                                text="{timeline}" />
+                            <Text
+                                text="{timeline}" />
+                            <Text
+                                text="{timeline}" />
+                            <Text
+                                text="{timeline}" />
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</semantic:content>
+
+
+	</semantic:SemanticPage>
+
+</mvc:View>
