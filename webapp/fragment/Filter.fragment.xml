@@ -3,8 +3,9 @@
 	xmlns:core="sap.ui.core">
 	<ViewSettingsDialog
 		id="filter"
+        title="정렬"
 		confirm=".onConfirmOrderDialog"
-		title="정렬">
+        reset=".resetGroupDialog">
         <filterItems>
             <ViewSettingsFilterItem text="부서" key="department" >
                 <items>
@@ -22,13 +23,15 @@
                     <ViewSettingsItem text="사원" key="position___EQ___사원___X" />
                 </items>
             </ViewSettingsFilterItem>
-            <!-- <ViewSettingsFilterItem text="입사일" key="hiredDate" >
+            <ViewSettingsFilterItem text="입사년도" key="hiredYear" >
                 <items>
-                    <ViewSettingsItem text="" key="" />
-                    <ViewSettingsItem text="" key="" />
-                    <ViewSettingsItem text="" key="" />
+                    <ViewSettingsItem text="2021" key="hiredYear___EQ___2021___X" />
+                    <ViewSettingsItem text="2017" key="hiredYear___EQ___2017___X" />
+                    <ViewSettingsItem text="2015" key="hiredYear___EQ___2015___X" />
+                    <ViewSettingsItem text="2010" key="hiredYear___EQ___2010___X" />
+                    <ViewSettingsItem text="2006" key="hiredYear___EQ___2006___X" />
                 </items>
-            </ViewSettingsFilterItem> -->
+            </ViewSettingsFilterItem>
         </filterItems>
 
 		<sortItems>
@@ -43,7 +46,7 @@
         <groupItems>
             <ViewSettingsItem text="부서" key="department" selected="true" />
             <ViewSettingsItem text="직급" key="position" />
-            <ViewSettingsItem text="입사일" key="hiredDate" />
+            <ViewSettingsItem text="입사년도" key="hiredYear" />
         </groupItems>
 	</ViewSettingsDialog>
 </core:FragmentDefinition>

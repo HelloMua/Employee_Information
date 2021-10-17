@@ -50,6 +50,15 @@ sap.ui.define([
             this.getView().setModel(oModel, "employee");
             // this.getView().getModel("employee").refresh(true);
 
+            // 입사년도 필터링을 위한 값 추출
+            var oModeData = this.getView().getModel("employee");
+            console.log(oModeData);
+            // for (var i = 0; i <) {
+
+            // }
+            // var aDateSplit = this.getView().getModel("employee").getProperty("/")[hiredDate];
+            // console.log(aDateSplit);
+
             // 게시판 카운트 모델 생성
             const oCountModel = new JSONModel({ count: 0 });
             this.getView().setModel(oCountModel, "co");
@@ -68,7 +77,35 @@ sap.ui.define([
             // console.log(oBinding);
             // console.log(oBinding.aIndices);
             // console.log(oBinding.aIndices.length);
-		},
+
+            // 그룹화 : 선택한 property를 저장하는 변수 
+            this.mGroupFunctions = {
+                // 부서
+                department: function (oContext) {
+                    var department = oContext.getProperty("department");
+                    return {
+                        key: department,
+                        text: department
+                    };
+                },
+                // 직급
+                position: function (oContext) {
+                    var position = oContext.getProperty("position");
+                    return {
+                        key: position,
+                        text: position
+                    };
+                },
+                // 입사년도
+                hiredYear: function (oContext) {
+                    var hiredYear = oContext.getProperty("hiredYear");
+                    return {
+                        key: hiredYear,
+                        text: hiredYear
+                    }
+                }
+            }
+        },
 
 		/* =========================================================== */
 		/* event handlers                                              */
@@ -140,9 +177,8 @@ sap.ui.define([
         },
         
         onCreateEmployee: function(){
-            /**
-             * 어제 했던 push 방식으로 추가
-             */
+            
+            
             this.getView().byId("empDialog").close();
         },
 
@@ -244,7 +280,6 @@ sap.ui.define([
             } else if (this.byId("selectedItems").getSelectedKey() === "email") {
                 aFilterSet.push(new Filter({filters: aEmailFilter}));
             } else if (this.byId("selectedItems").getSelectedKey() === "all") {
-                console.log("타나?")
                 aFilterSet.push(new Filter({
                     filters: [
                         new Filter({path: "department", operator: FilterOperator.Contains, value1: sSearchValue, caseSensitive: false}),
@@ -267,12 +302,17 @@ sap.ui.define([
 			if (oTable.getBinding("items").length !== 0) {
                 // oViewModel.setProperty("/tableNoDataText", this.getResourceBundle().getText("emplistNoDataWithSearchText"));
                 oViewModel.setProperty("/tableNoDataText", "데이터가  없습니다.");
-			}
+            }
+            
+            // 테이블에 리스트 카운트 넣어주기
+            let oBinding = this.byId("table").getBinding("items");
+            
+            if (oBinding != undefined && oBinding.aIndices != undefined) {
+                this.getView().getModel("co").setProperty("/count", oBinding.aIndices.length);
+            }
         },
         
         onExport : function () {
-            console.log(this.byId("table").getBinding("items"));
-
             if(this.byId("table").getBinding("items") === undefined){
                 MessageBox.alert("리스트를 먼저 조회해주세요.");
                 return;
@@ -372,10 +412,13 @@ sap.ui.define([
             }
         },
 
+        resetGroupDialog: function (oEvent) {
+            this.groupReset = true;
+        },
+
         onConfirmOrderDialog : function (oEvent) {
-            let mParams = oEvent.getParameters();           // 해당 이벤트가 발생한 시점의 정보
-            let oBinding = this.byId("table").getBinding("items");      // table의 items 컬럼들값 (테이블의 행 정보)
-            console.log(mParams);        
+            let mParams = oEvent.getParameters();           // 해당 이벤트가 발생한 시점의 정보 (filter, group, sort의 정보를 모두 가지고 있음)
+            let oBinding = this.byId("table").getBinding("items");      // table의 items 컬럼들값 (테이블의 행 정보)       
 
             // 정렬
             let sPath = mParams.sortItem.getKey();          // fragment.xml에서 지정한 sortItems의 key값
@@ -385,18 +428,19 @@ sap.ui.define([
             aSorters.push(new Sorter(sPath, bDescending));  // sortItems의 key값들을 오름차순으로 정렬할 배열
             
             this.getView().getModel("co").setProperty("/count", oBinding.aIndices.length);  // 행의 갯수를 담는 로직
-            oBinding.sort(aSorters);    // 행을 정렬할 때 aSorters 배열을 가져와서 담음
+            // oBinding.sort(aSorters);    // 행을 정렬할 때 aSorters 배열을 가져와서 담음
 
             // 필터
             let aFilters = [];
             mParams.filterItems.forEach(function (oItem) {
-                // console.log(oItem);
+                // oItem.getKey() : fragment에서 설정한 key값을 가져옴
                 var aSplit = oItem.getKey().split("___"),       // "___"의 앞과 뒤를 기준으로 string을 array형태로 만들어줌
-                sPath = aSplit[0],
-                sOperator = aSplit[1],
-                sValue1 = aSplit[2],
-                sValue2 = aSplit[3],
-                oFilter = new Filter(sPath, sOperator, sValue1, sValue2);
+                    sPath = aSplit[0],
+                    sOperator = aSplit[1],
+                    sValue1 = aSplit[2],
+                    sValue2 = aSplit[3],
+                    oFilter = new Filter(sPath, sOperator, sValue1, sValue2);
+
                 aFilters.push(oFilter);
             });
 
@@ -407,8 +451,6 @@ sap.ui.define([
             this.byId("filterBar").setVisible(aFilters.length > 0);
             this.byId("filterLabel").setText(mParams.filterString);
 
-            console.log(aFilters);
-
             // 그룹화
             let vGroup,
                 aGroups = [];
@@ -417,15 +459,20 @@ sap.ui.define([
                 sPath = mParams.groupItem.getKey();
                 bDescending = mParams.groupDescending;
 
-                console.log(sPath);
                 vGroup = this.mGroupFunctions[sPath];
                 aGroups.push(new Sorter(sPath, bDescending, vGroup));
 
                 // apply the selected group settings
                 oBinding.sort(aGroups);
-            } else if (this.groupReset) {
-                oBinding.sort();
-                this.groupReset = false;
+            } else {
+                // 그룹화가 되어 있는 상태라면 sort의 기능은 실행불가
+                oBinding.sort(aSorters);
+                this.groupReset = true;
+            }
+
+            // 테이블에 리스트 카운트 넣어주기            
+            if (oBinding != undefined && oBinding.aIndices != undefined) {
+                this.getView().getModel("co").setProperty("/count", oBinding.aIndices.length);
             }
         }
 	});
