@@ -15,50 +15,45 @@
                 <form:SimpleForm
                     layout="ResponsiveGridLayout">
                     <form:content>
-                        <VBox class="sapUiTinyMarginTopBottom">
+                        <HBox>
+                        <VBox class="sapUiTinyMarginBottom" width="50%">
                             <Label text="부서:" required="true"/> 
-                            <Select id="input1" selectedKey="{/department}" items="{/department}" required="true">
-                                <core:Item text="개발" key="{type}"></core:Item>
-                                <core:Item text="인사" key="{type}"></core:Item>
-                                <core:Item text="영업" key="{type}"></core:Item>
+                            <Select id="input1" selectedKey="{/department}" items="{category>/department}" required="true">
+                                <core:Item text="{category>type}" key="{category>type}"></core:Item>
                             </Select>
                             <layoutData>
-                                <layout:GridData span="XL12 L12 M12 S12" />
+                                <layout:GridData span="XL6 L6 M12 S12" />
                             </layoutData> 
                         </VBox>
 
-                        <VBox class="sapUiTinyMarginTopBottom">
+                        <VBox class="sapUiTinyMarginBottom" width="50%">
                             <Label text="직급:" required="true"/> 
-                            <Select  id="input2" selectedKey="{/department>position}" items="{/position}" required="true">
-                                <core:Item text="{type}" key="{type}"></core:Item>
+                            <Select  id="input2" selectedKey="{/position}" items="{category>/position}" required="true">
+                                <core:Item text="{category>type}" key="{category>type}"></core:Item>
                             </Select>
                             <layoutData>
-                                <layout:GridData span="XL12 L12 M12 S12" />
+                                <layout:GridData span="XL6 L6 M12 S12" />
                             </layoutData> 
                         </VBox>
+                        </HBox>
 
-                        <VBox>
+                        <HBox>
+                        <VBox class="sapUiTinyMarginBottom">
                             <Label text="성명:" required="true"/> 
-                            <MaskInput id="input3" mask="_" placehodlerSymbol="" placehodler="이름">
-                                <rules>
-                                    <MaskInputRule regex="[^0-9]" />
-                                </rules>
-                            </MaskInput>
+                            <Input
+                                id="input3" width="70%" />
                             <layoutData>
                                 <layout:GridData span="XL12 L12 M12 S12" />
                             </layoutData> 
                         </VBox>
 
-                        <VBox>
+                        <VBox class="sapUiTinyMarginBottom">
                             <Label text="사번:" required="true"/> 
-                            <Input id="input4" placeholder="*****">
-                                <suggestionItems>
-                                    <core:Item text="itemName" />
-                                </suggestionItems>
-                            </Input>
+                            <MaskInput id="input4" mask="99999" placeholderSymbol="_" placeholder="사번을 입력하세요."/>
                         </VBox>
+                        </HBox>
                         
-                        <VBox>
+                        <VBox class="sapUiTinyMarginBottom">
                             <Label text="입사일:" required="true"/> 
                             <DatePicker id="input5" name="" placeholder="YYYY-MM-DD" value="" valueStateText="" width="">
                             </DatePicker>
@@ -67,12 +62,12 @@
                             </layoutData> 
                         </VBox>
 
-                        <VBox>
+                        <VBox class="sapUiTinyMarginBottom">
                             <Label text="담당업무:" required="true"/> 
-                            <TextArea id="input6" value="{employee>/task}" valueLiveUpdate="{employee>/task}"/>
+                            <TextArea id="input6"/>
                         </VBox>
 
-                        <VBox>
+                        <VBox class="sapUiTinyMarginBottom">
                             <Label text="연락처:" required="true"/> 
                             <MaskInput  id="input7" mask="999-9999-9999" placeholderSymbol="_" placeholder="번호를 입력해 주세요"/>
                             <layoutData>
@@ -80,7 +75,7 @@
                             </layoutData> 
                         </VBox>
 
-                        <VBox>
+                        <VBox class="sapUiTinyMarginBottom">
                             <Label text="이메일:" required="true"/> 
                             <Input id="input8" placeholder="">
                                 <suggestionItems>

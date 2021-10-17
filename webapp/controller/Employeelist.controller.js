@@ -30,9 +30,6 @@ sap.ui.define([
 		onInit : function () {
             var oViewModel;
 
-            var oCategory = new JSONModel("../model/category.json");
-            this.getView().setModel(oCategory);
-
 			// keeps the search state
 			this._aTableSearchState = [];
 
@@ -50,9 +47,12 @@ sap.ui.define([
             this.getView().setModel(oModel, "employee");
             // this.getView().getModel("employee").refresh(true);
 
+            var oCategory = new JSONModel("../model/category.json");
+            this.getView().setModel(oCategory, "category");
+
             // 입사년도 필터링을 위한 값 추출
-            var oModeData = this.getView().getModel("employee");
-            console.log(oModeData);
+            // var oModeData = this.getView().getModel("employee");
+            // console.log(oModeData);
             // for (var i = 0; i <) {
 
             // }
@@ -64,19 +64,12 @@ sap.ui.define([
             this.getView().setModel(oCountModel, "co");
             // this.getView().getModel("co").refresh(true);
             
-
             // 테이블에 리스트 카운트 넣어주기
-            // let aSorters = [{}];
             let oBinding = this.byId("table").getBinding("items");
             
             if (oBinding != undefined && oBinding.aIndices != undefined) {
                 this.getView().getModel("co").setProperty("/count", oBinding.aIndices.length);
             }
-            // oBinding.sort(aSorters);
-       
-            // console.log(oBinding);
-            // console.log(oBinding.aIndices);
-            // console.log(oBinding.aIndices.length);
 
             // 그룹화 : 선택한 property를 저장하는 변수 
             this.mGroupFunctions = {
@@ -177,7 +170,36 @@ sap.ui.define([
         },
         
         onCreateEmployee: function(){
+            var input1 = this.getView().byId("input1").getSelectedKey();
+            var input2 = this.getView().byId("input2").getSelectedKey();
+            var input3 = this.getView().byId("input3").getValue();
+            var input4 = this.getView().byId("input4").getValue();
+            var input5 = this.getView().byId("input5").getDateValue();
+            var input6 = this.getView().byId("input6").getValue();
+            var input7 = this.getView().byId("input7").getValue();
+            var input8 = this.getView().byId("input8").getValue();
+
+            var oModelData = this.getView().getModel("employee").getProperty("/");
             
+            oModelData.push({
+                department: input1,
+                position: input2,
+                name: input3,
+                id: input4,
+                hiredDate: input5,
+                task: input6,
+                phoneNumber: input7,
+                email: input8
+            });
+
+            this.getView().getModel("employee").refresh(true);
+
+            // 테이블에 리스트 카운트 넣어주기
+            let oBinding = this.byId("table").getBinding("items");
+            
+            if (oBinding != undefined && oBinding.aIndices != undefined) {
+                this.getView().getModel("co").setProperty("/count", oBinding.aIndices.length);
+            }
             
             this.getView().byId("empDialog").close();
         },
